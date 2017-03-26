@@ -161,8 +161,19 @@ function! s:read_clipboard()  "{{{2
 endfunction
 
 
+function! s:mac_prefix_clipboard(rawcmd)
+  let l:cmd = a:rawcmd
+  let l:prefix = 'reattach-to-user-namespace'
+  if executable(l:prefix)
+    let l:cmd = l:prefix . ' ' . a:rawcmd
+  endif
+  return l:cmd
+endfunction
+
+
+
 function! s:read_clipboard_mac()
-  return system('pbpaste')
+  return system(s:mac_prefix_clipboard('pbpaste'))
 endfunction
 
 
@@ -248,7 +259,7 @@ endfunction
 
 
 function! s:write_clipboard_mac(text)
-  call system('pbcopy', a:text)
+  call system(s:mac_prefix_clipboard('pbcopy'), a:text)
   return
 endfunction
 
