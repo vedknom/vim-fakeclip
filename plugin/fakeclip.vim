@@ -170,45 +170,53 @@ vnoremap <silent> <Plug>(fakeclip-screen-D)
 command! -bang -bar -nargs=0 FakeclipDefaultKeyMappings
 \ call s:cmd_FakeclipDefaultKeyMappings(<bang>0)
 
+function! s:map_fakeclip_commands(modifier, prefix)
+  let modifier = a:modifier
+  let prefix = a:prefix
+  execute 'silent! nmap '.modifier.' '.prefix.'y  <Plug>(fakeclip-y)'
+  execute 'silent! nmap '.modifier.' '.prefix.'Y  <Plug>(fakeclip-Y)'
+  execute 'silent! nmap '.modifier.' '.prefix.'yy  <Plug>(fakeclip-Y)'
+  execute 'silent! vmap '.modifier.' '.prefix.'y  <Plug>(fakeclip-y)'
+  execute 'silent! vmap '.modifier.' '.prefix.'Y  <Plug>(fakeclip-Y)'
+
+  execute 'silent! nmap '.modifier.' '.prefix.'p  <Plug>(fakeclip-p)'
+  execute 'silent! nmap '.modifier.' '.prefix.'P  <Plug>(fakeclip-P)'
+  execute 'silent! nmap '.modifier.' '.prefix.'gp  <Plug>(fakeclip-gp)'
+  execute 'silent! nmap '.modifier.' '.prefix.'gP  <Plug>(fakeclip-gP)'
+  execute 'silent! nmap '.modifier.' '.prefix.']p  <Plug>(fakeclip-]p)'
+  execute 'silent! nmap '.modifier.' '.prefix.']P  <Plug>(fakeclip-]P)'
+  execute 'silent! nmap '.modifier.' '.prefix.'[p  <Plug>(fakeclip-[p)'
+  execute 'silent! nmap '.modifier.' '.prefix.'[P  <Plug>(fakeclip-[P)'
+  execute 'silent! vmap '.modifier.' '.prefix.'p  <Plug>(fakeclip-p)'
+  execute 'silent! vmap '.modifier.' '.prefix.'P  <Plug>(fakeclip-P)'
+  execute 'silent! vmap '.modifier.' '.prefix.'gp  <Plug>(fakeclip-gp)'
+  execute 'silent! vmap '.modifier.' '.prefix.'gP  <Plug>(fakeclip-gP)'
+  execute 'silent! vmap '.modifier.' '.prefix.']p  <Plug>(fakeclip-]p)'
+  execute 'silent! vmap '.modifier.' '.prefix.']P  <Plug>(fakeclip-]P)'
+  execute 'silent! vmap '.modifier.' '.prefix.'[p  <Plug>(fakeclip-[p)'
+  execute 'silent! vmap '.modifier.' '.prefix.'[P  <Plug>(fakeclip-[P)'
+
+  execute 'silent! nmap '.modifier.' '.prefix.'d  <Plug>(fakeclip-d)'
+  execute 'silent! vmap '.modifier.' '.prefix.'d  <Plug>(fakeclip-d)'
+  execute 'silent! nmap '.modifier.' '.prefix.'dd  <Plug>(fakeclip-dd)'
+  execute 'silent! nmap '.modifier.' '.prefix.'D  <Plug>(fakeclip-D)'
+  execute 'silent! vmap '.modifier.' '.prefix.'D  <Plug>(fakeclip-D)'
+endfunction
+
 function! s:cmd_FakeclipDefaultKeyMappings(banged_p)
   let modifier = a:banged_p ? '' : '<unique>'
   " Clipboard
   if !has('clipboard') || get(g:, 'fakeclip_provide_clipboard_key_mappings', 0)
     for _ in ['+', '*']
-      execute 'silent! nmap '.modifier.' "'._.'y  <Plug>(fakeclip-y)'
-      execute 'silent! nmap '.modifier.' "'._.'Y  <Plug>(fakeclip-Y)'
-      execute 'silent! nmap '.modifier.' "'._.'yy  <Plug>(fakeclip-Y)'
-      execute 'silent! vmap '.modifier.' "'._.'y  <Plug>(fakeclip-y)'
-      execute 'silent! vmap '.modifier.' "'._.'Y  <Plug>(fakeclip-Y)'
-
-      execute 'silent! nmap '.modifier.' "'._.'p  <Plug>(fakeclip-p)'
-      execute 'silent! nmap '.modifier.' "'._.'P  <Plug>(fakeclip-P)'
-      execute 'silent! nmap '.modifier.' "'._.'gp  <Plug>(fakeclip-gp)'
-      execute 'silent! nmap '.modifier.' "'._.'gP  <Plug>(fakeclip-gP)'
-      execute 'silent! nmap '.modifier.' "'._.']p  <Plug>(fakeclip-]p)'
-      execute 'silent! nmap '.modifier.' "'._.']P  <Plug>(fakeclip-]P)'
-      execute 'silent! nmap '.modifier.' "'._.'[p  <Plug>(fakeclip-[p)'
-      execute 'silent! nmap '.modifier.' "'._.'[P  <Plug>(fakeclip-[P)'
-      execute 'silent! vmap '.modifier.' "'._.'p  <Plug>(fakeclip-p)'
-      execute 'silent! vmap '.modifier.' "'._.'P  <Plug>(fakeclip-P)'
-      execute 'silent! vmap '.modifier.' "'._.'gp  <Plug>(fakeclip-gp)'
-      execute 'silent! vmap '.modifier.' "'._.'gP  <Plug>(fakeclip-gP)'
-      execute 'silent! vmap '.modifier.' "'._.']p  <Plug>(fakeclip-]p)'
-      execute 'silent! vmap '.modifier.' "'._.']P  <Plug>(fakeclip-]P)'
-      execute 'silent! vmap '.modifier.' "'._.'[p  <Plug>(fakeclip-[p)'
-      execute 'silent! vmap '.modifier.' "'._.'[P  <Plug>(fakeclip-[P)'
+      call s:map_fakeclip_commands(modifier, '"'._)
 
       execute 'silent! map! '.modifier.' <C-r>'._.'  <Plug>(fakeclip-insert)'
       execute 'silent! map! '.modifier.' <C-r><C-r>'._.'  <Plug>(fakeclip-insert-r)'
       execute 'silent! map! '.modifier.' <C-r><C-o>'._.'  <Plug>(fakeclip-insert-o)'
       execute 'silent! imap '.modifier.' <C-r><C-p>'._.'  <Plug>(fakeclip-insert-p)'
-
-      execute 'silent! nmap '.modifier.' "'._.'d  <Plug>(fakeclip-d)'
-      execute 'silent! vmap '.modifier.' "'._.'d  <Plug>(fakeclip-d)'
-      execute 'silent! nmap '.modifier.' "'._.'dd  <Plug>(fakeclip-dd)'
-      execute 'silent! nmap '.modifier.' "'._.'D  <Plug>(fakeclip-D)'
-      execute 'silent! vmap '.modifier.' "'._.'D  <Plug>(fakeclip-D)'
     endfor
+
+    call s:map_fakeclip_commands(modifier, '')
   endif
 
   " Paste buffer
